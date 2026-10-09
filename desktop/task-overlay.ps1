@@ -207,13 +207,17 @@ $script:lastDone = 0
 # DSH 端口探测状态（推送稀疏时用它判断 DSH 是否还在运行）
 $script:lastProbeAt = 0
 $script:hostAlive = $true
+# 宿主端口由 GUI 客户端在每帧快照里上报（hp 字段）——DSH 端口会变，不能只靠默认值
+$script:probePort = $null
 
 # 探测 DSH 宿主端口是否还在监听（页面最小化会节流推送，不能只凭推送判断存活）
 function Test-PageHost {
+  $port = if ($script:probePort) { [int]$script:probePort } elseif ($DshPort) { [int]$DshPort } else { 0 }
+  if ($port -le 0) { return $true }   # 端口未知（例如 dsh-app:// 协议）时保守当作存活
   $client = $null
   try {
     $client = New-Object System.Net.Sockets.TcpClient
-    $task = $client.ConnectAsync('127.0.0.1', [int]$DshPort)
+    $task = $client.ConnectAsync('127.0.0.1', $port)
     $completed = $task.Wait(400)
     return ($completed -and $client.Connected)
   } catch {
@@ -326,6 +330,9 @@ function Update-FromPayload($raw) {
   $data = $raw | ConvertFrom-Json
   $state = [string]$data.state
   $counts = $data.counts
+
+  # 记住客户端上报的宿主端口，存活探测用它（DSH 端口会变）
+  if ($data.hp) { $script:probePort = [string]$data.hp }
 
   # 状态点与徽标
   $dotColor = switch ($state) {

@@ -784,6 +784,9 @@ window.__ModuleLoader__.load({
 
         return {
           v: 1,
+          // 宿主端口：桌面浮窗用它做存活探测（DSH 端口会变，不能写死）。
+          // 桌面端是 dsh-app:// 协议时 location.port 为空 → 浮窗按"存活"处理。
+          hp: (typeof location !== 'undefined' && location.port) ? String(location.port) : '',
           state: cardState,
           counts: {
             running: signals.running.length,
