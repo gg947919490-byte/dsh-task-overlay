@@ -1,0 +1,7 @@
+# dsh bundle layer: mount the frame-wide task-status overlay row.
+# 宿主半边是一个空 apply（纯 UI 插件），浏览器半边由 package.json 的
+# dsh.client 声明自动发现并加载。桌面浮窗的状态接口在
+# dsh-task-overlay-host 包里（加载器的行必须指向包根，不能用子路径导出）。
+- insert:
+    - id: task-overlay
+      name: dsh-task-overlay

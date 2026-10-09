@@ -1,0 +1,48 @@
+{
+  "name": "dsh-task-overlay",
+  "version": "1.0.0",
+  "description": "DeepSeek Harness 任务悬浮窗：独立于 DSH 窗口的桌面状态浮窗（目标 / Todo 进度 / 待确认与完成提醒），并在 DSH 侧栏提供启停开关。Windows 桌面浮窗部分仅支持 Windows。",
+  "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gg947919490-byte/dsh-task-overlay.git"
+  },
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek-harness",
+    "task-overlay",
+    "desktop-overlay",
+    "status",
+    "todo"
+  ],
+  "exports": {
+    ".": "./dsh/index.js",
+    "./client": "./dsh/client.js",
+    "./cordis.patch.yml": "./cordis.patch.yml",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dsh",
+    "desktop",
+    "cordis.patch.yml",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=20",
+    "dsh": ">=0.2.0-0"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "inject": []
+    }
+  },
+  "scripts": {
+    "pack:dry": "npm pack --dry-run"
+  }
+}
